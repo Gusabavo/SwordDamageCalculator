@@ -8,36 +8,67 @@ namespace SwordDamageCalculator
 {
     internal class SwordDamage
     {
-        public const int BASE_DAMAGE = 3;
-        public const int FLAME_DAMAGE = 2;
-
-        public int Roll;
-        public decimal MagicMultiplier = 1M;
-        public int FlamingDamage = 0;
-        public int Damage;
-
-        public void CalculateDamage()
+        public SwordDamage(int startingRoll)
         {
-            Damage = (int)(Roll * MagicMultiplier) + BASE_DAMAGE + FlamingDamage;
-        }
-        public void SetMagic(bool isMagic)
-        {
-            if (isMagic)
-            {
-                MagicMultiplier = 1.75M;
-            }
-            else
-            {
-                MagicMultiplier = 1M;
-            }
+            roll = startingRoll;
             CalculateDamage();
         }
-        public void SetFlaming(bool isFlaming)
+
+
+        private const int BASE_DAMAGE = 3;
+        private const int FLAME_DAMAGE = 2;
+        private int roll;
+
+        public int Roll
         {
-            CalculateDamage();
-            if (isFlaming)
+            get
             {
-                Damage += FLAME_DAMAGE;
+                return roll;
+            }
+            set
+            {
+                roll = value;
+                CalculateDamage();
+            }
+        }
+
+        public int Damage { get; private set; }
+
+        private void CalculateDamage()
+        {
+            decimal magicMultiplier = 1M;
+            if (Magic) magicMultiplier = 1.75M;
+
+            Damage = BASE_DAMAGE;
+            Damage = (int)(Roll * magicMultiplier) + BASE_DAMAGE;
+            if (Flaming) Damage += FLAME_DAMAGE;
+        }
+
+        private bool magic;
+        public bool Magic
+        {
+            get
+            {
+                return magic;
+            }
+            set
+            {
+                magic = value;
+                CalculateDamage();
+            }
+        }
+
+        private bool flaming;
+        public bool Flaming
+        {
+            get
+            {
+                return flaming;
+            }
+            set
+            {
+                flaming = value;
+                CalculateDamage();
             }
         }
     }
